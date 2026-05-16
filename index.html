@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="HemoConecta — O app que conecta doadores de sangue a hemocentros, aumentando a adesão entre jovens de 18 a 25 anos."/>
+<meta name="theme-color" content="#0F1923"/>
+<title>HemoConecta — Doe sangue. Salve vidas.</title>
+<link rel="shortcut icon" href="image.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+:root{
+  --red:#E05252;
+  --red-deep:#C03A3A;
+  --navy:#0F1923;
+  --navy-mid:#1a2a38;
+  --green:#4CAF85;
+  --warm:#F7F0EF;
+  --warm-mid:#EDE5E3;
+  --text:#0F1923;
+  --muted:#6B7280;
+  --border:rgba(15,25,35,.1);
+  --r-sm:12px;
+  --r-md:18px;
+  --r-lg:28px;
+  --r-xl:40px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--warm);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* ─── NOISE TEXTURE ─── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:-1;opacity:.4;
+}
+
+/* ─── NAV ─── */
+.site-nav{
+  position:fixed;top:0;left:0;right:0;z-index:1100;
+  display:flex;align-items:center;justify-content:space-between;gap:22px;
+  padding:14px clamp(20px,4vw,44px);
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:0.5px solid var(--border);
+  box-shadow:0 10px 30px rgba(15,25,35,.04);
+  transition:background .25s, box-shadow .25s, padding .25s;
+  overflow:visible;
+}
+.site-nav > *{position:relative;z-index:2;}
+.site-nav.scrolled{
+  background:rgba(255,255,255,.985);
+  box-shadow:0 14px 40px rgba(15,25,35,.08);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:14px;
+  text-decoration:none;flex:0 0 auto;min-width:max-content;
+}
+.nav-logo-icon{
+  width:40px;height:40px;background:linear-gradient(135deg,var(--red),var(--red-deep));
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(224,82,82,.24);
+}
+.nav-logo-icon svg{display:block}
+.nav-logo-img{
+  width:66px;
+  height:66px;
+  object-fit:contain;
+  display:block;
+  border-radius:16px;
+  filter:drop-shadow(0 8px 16px rgba(224,82,82,.18));
+}
+.footer-logo-img{
+  width:48px;
+  height:48px;
+  object-fit:contain;
+  display:block;
+  border-radius:12px;
+  filter:drop-shadow(0 6px 14px rgba(224,82,82,.16));
+}
+.nav-logo-name{
+  font-family:'Fraunces',serif;font-size:24px;font-weight:700;
+  color:var(--navy);letter-spacing:-.55px;line-height:1;
+}
+.nav-logo-name span{color:var(--red);}
+.nav-menu{
+  display:flex;align-items:center;justify-content:flex-end;gap:26px;
+  width:100%;
+}
+.nav-links{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  flex:1;
+}
+.nav-links a{
+  font-size:14px;color:rgba(15,25,35,.76);text-decoration:none;
+  font-weight:700;transition:color .15s,background .15s;
+  padding:9px 12px;border-radius:999px;line-height:1;
+  white-space:nowrap;
+}
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--red);
+  background:rgba(224,82,82,.09);
+}
+.nav-cta{
+  background:var(--navy);color:#fff;
+  padding:11px 20px;border-radius:40px;
+  font-size:14px;font-weight:700;text-decoration:none;
+  transition:background .2s,transform .2s,box-shadow .2s;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  white-space:nowrap;flex:0 0 auto;
+  box-shadow:0 10px 24px rgba(15,25,35,.14);
+}
+.nav-cta:hover{background:var(--red);transform:translateY(-1px);box-shadow:0 12px 28px rgba(224,82,82,.25);}
+.nav-toggle{
+  display:none;
+  width:44px;height:44px;border:1px solid var(--border);border-radius:14px;
+  background:#fff;cursor:pointer;align-items:center;justify-content:center;
+  position:relative;z-index:1200;
+}
+.nav-toggle-bar,
+.nav-toggle-bar::before,
+.nav-toggle-bar::after{
+  content:'';display:block;width:19px;height:2px;background:var(--navy);
+  border-radius:2px;transition:transform .2s,opacity .2s;
+}
+.nav-toggle-bar{position:relative;}
+.nav-toggle-bar::before,
+.nav-toggle-bar::after{position:absolute;left:0;top:0;}
+.nav-toggle-bar::before{transform:translateY(-6px);}
+.nav-toggle-bar::after{transform:translateY(6px);}
+.site-nav.open .nav-toggle-bar{transform:rotate(45deg);}
+.site-nav.open .nav-toggle-bar::before{transform:translateY(0) rotate(90deg);}
+.site-nav.open .nav-toggle-bar::after{opacity:0;transform:translateY(0);}
+
+@media(max-width:980px){
+  .nav-links{gap:2px;}
+  .nav-links a{font-size:13px;padding:8px 9px;}
+  .nav-cta{padding:10px 16px;font-size:13px;}
+}
+
+@media(max-width:768px){
+  .site-nav{padding:12px 18px;}
+  .nav-logo-icon{width:38px;height:38px;border-radius:13px;}
+  .nav-logo-img{width:54px;height:54px;border-radius:14px;}
+  .nav-logo-name{font-size:20px;}
+  .nav-toggle{display:inline-flex;}
+  .nav-menu{
+    position:absolute;top:calc(100% + 10px);left:18px;right:18px;
+    display:none;flex-direction:column;align-items:stretch;gap:12px;
+    padding:14px;
+    background:rgba(255,255,255,.98);
+    border:1px solid var(--border);
+    border-radius:22px;
+    box-shadow:0 20px 50px rgba(15,25,35,.14);
+  }
+  .site-nav.open .nav-menu{display:flex;}
+  .nav-links{
+    display:flex;flex-direction:column;align-items:stretch;gap:4px;
+  }
+  .nav-links a{
+    width:100%;font-size:15px;padding:13px 14px;
+    border-radius:14px;color:var(--navy);
+  }
+  .nav-cta{
+    width:100%;padding:14px 18px;font-size:15px;
+  }
+}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:120px 40px 80px;
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(224,82,82,.12) 0%, transparent 70%),
+             radial-gradient(ellipse 50% 40% at 80% 80%, rgba(76,175,133,.08) 0%, transparent 60%);
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:0.5px solid var(--border);
+  border-radius:40px;padding:6px 16px;
+  font-size:12px;font-weight:600;color:var(--red);
+  letter-spacing:.05em;text-transform:uppercase;
+  margin-bottom:28px;
+  animation:fadeUp .6s ease both;
+}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:3px;background:var(--red);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(48px,8vw,88px);
+  font-weight:700;
+  color:var(--navy);
+  line-height:1.0;
+  letter-spacing:-2px;
+  margin-bottom:24px;
+  max-width:800px;
+  animation:fadeUp .7s .1s ease both;
+}
+.hero-h1 em{font-style:italic;color:var(--red);}
+.hero-sub{
+  font-size:clamp(16px,2vw,20px);
+  color:var(--muted);
+  max-width:520px;
+  line-height:1.65;
+  margin-bottom:44px;
+  animation:fadeUp .7s .2s ease both;
+}
+.hero-actions{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .7s .3s ease both;
+}
+.btn-primary{
+  background:var(--red);color:#fff;
+  padding:16px 32px;border-radius:50px;
+  font-size:16px;font-weight:600;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .25s;box-shadow:0 8px 32px rgba(224,82,82,.3);
+}
+.btn-primary:hover{background:var(--red-deep);transform:translateY(-2px);box-shadow:0 12px 40px rgba(224,82,82,.4);}
+.btn-ghost{
+  color:var(--navy);padding:16px 28px;border-radius:50px;
+  font-size:16px;font-weight:500;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid var(--border);transition:all .25s;
+  background:#fff;
+}
+.btn-ghost:hover{border-color:var(--navy);transform:translateY(-2px);}
+.hero-stat{
+  display:flex;align-items:center;gap:32px;
+  margin-top:56px;padding-top:40px;
+  border-top:0.5px solid var(--border);
+  animation:fadeUp .7s .4s ease both;
+  flex-wrap:wrap;justify-content:center;
+}
+.stat-item{text-align:center;}
+.stat-num{
+  font-family:'Fraunces',serif;font-size:36px;font-weight:700;
+  color:var(--navy);line-height:1;
+}
+.stat-num span{color:var(--red);}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4;}
+.stat-div{width:0.5px;height:40px;background:var(--border);}
+
+/* PHONE MOCKUP */
+.hero-phone{
+  margin-top:60px;
+  position:relative;
+  animation:fadeUp .8s .5s ease both;
+}
+.phone-wrap{
+  width:240px;margin:0 auto;
+  background:#0d0d12;border-radius:44px;
+  padding:10px;border:5px solid #1a1a24;
+  box-shadow:0 40px 80px rgba(15,25,35,.35),0 0 0 1px #2a2a38;
+  position:relative;
+}
+.phone-notch{width:64px;height:20px;background:#0d0d12;border-radius:0 0 12px 12px;margin:0 auto 5px;}
+.phone-screen-img{
+  background:#0F1923;border-radius:28px;overflow:hidden;
+  height:420px;display:flex;flex-direction:column;
+}
+.ps-hero{background:#0F1923;padding:16px;flex-shrink:0;}
+.ps-greet{font-size:10px;color:rgba(255,255,255,.5);}
+.ps-name{font-family:'Fraunces',serif;font-size:16px;color:#fff;font-weight:600;margin-top:1px;}
+.ps-type{background:#E05252;color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:7px;display:inline-block;margin-top:6px;}
+.ps-body{flex:1;padding:10px;overflow:hidden;}
+.ps-status{background:linear-gradient(135deg,#1a6b3a,#27864a);border-radius:12px;padding:11px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.ps-si{width:34px;height:34px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;}
+.ps-st{color:#fff;}
+.ps-sm{font-size:12px;font-weight:600;}
+.ps-ss{font-size:10px;opacity:.8;margin-top:1px;}
+.ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px;}
+.ps-mc{background:rgba(255,255,255,.06);border-radius:10px;padding:9px 10px;}
+.ps-ml{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+.ps-mv{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:#fff;line-height:1.2;margin-top:2px;}
+.ps-ms{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
+.ps-near{background:rgba(255,255,255,.06);border-radius:12px;padding:10px;}
+.ps-nn{font-size:11px;font-weight:600;color:#fff;}
+.ps-nd{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;}
+.ps-tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:600;margin-top:5px;}
+.ps-tag.r{background:rgba(224,82,82,.25);color:#ffaaaa;}
+.ps-bnav{height:46px;background:rgba(255,255,255,.05);border-top:0.5px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-around;flex-shrink:0;}
+.ps-bn{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:8px;cursor:pointer;}
+.ps-bn.a{color:#E05252;}
+.ps-bn:not(.a){color:rgba(255,255,255,.3);}
+.ps-bn i{font-size:17px;}
+
+/* PHONE GLOW */
+.phone-glow{
+  position:absolute;inset:-20px;
+  background:radial-gradient(ellipse at center, rgba(224,82,82,.2) 0%, transparent 70%);
+  border-radius:60px;z-index:-1;
+  animation:glowPulse 3s ease-in-out infinite;
+}
+@keyframes glowPulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ─── SECTION SHARED ─── */
+section{padding:100px 40px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(224,82,82,.08);border:0.5px solid rgba(224,82,82,.2);
+  border-radius:40px;padding:5px 14px;
+  font-size:11px;font-weight:600;color:var(--red);
+  letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;
+}
+.section-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(32px,5vw,52px);
+  font-weight:700;color:var(--navy);
+  line-height:1.1;letter-spacing:-1px;
+  margin-bottom:16px;
+}
+.section-title em{font-style:italic;color:var(--red);}
+.section-sub{font-size:17px;color:var(--muted);line-height:1.6;max-width:560px;}
+
+/* ─── PROBLEMA ─── */
+.problema{background:#fff;}
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.prob-cards{display:flex;flex-direction:column;gap:12px;}
+.prob-card{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--warm);border-radius:var(--r-md);
+  padding:16px 18px;border:0.5px solid var(--border);
+  transition:transform .2s,box-shadow .2s;
+}
+.prob-card:hover{transform:translateX(4px);box-shadow:0 4px 20px rgba(15,25,35,.08);}
+.prob-icon{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.prob-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:3px;}
+.prob-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+.big-stat-box{
+  background:var(--navy);border-radius:var(--r-lg);
+  padding:40px 36px;text-align:center;position:relative;overflow:hidden;
+}
+.big-stat-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(224,82,82,.3),transparent 60%);
+}
+.bsb-num{
+  font-family:'Fraunces',serif;font-size:80px;font-weight:700;
+  color:#fff;line-height:1;position:relative;
+}
+.bsb-num span{color:var(--red);}
+.bsb-desc{font-size:15px;color:rgba(255,255,255,.6);margin-top:8px;line-height:1.5;position:relative;}
+.bsb-sep{width:40px;height:2px;background:var(--red);margin:20px auto;border-radius:2px;position:relative;}
+.bsb-sub{font-size:13px;color:rgba(255,255,255,.4);position:relative;}
+
+/* ─── SOLUÇÃO ─── */
+.solucao{background:var(--warm);}
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+.sol-card{
+  background:#fff;border-radius:var(--r-md);
+  padding:28px 24px;border:0.5px solid var(--border);
+  transition:all .25s;position:relative;overflow:hidden;
+}
+.sol-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(15,25,35,.1);}
+.sol-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--red);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s;
+}
+.sol-card:hover::before{transform:scaleX(1);}
+.sol-num{
+  font-family:'Fraunces',serif;font-size:11px;font-weight:600;
+  color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;
+}
+.sol-icon{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:14px;
+}
+.sol-title{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+.sol-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ─── COMO FUNCIONA ─── */
+.como{background:#fff;}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative;}
+.steps::before{
+  content:'';position:absolute;top:28px;left:12%;right:12%;
+  height:1px;border-top:1.5px dashed var(--border);z-index:0;
+}
+.step{text-align:center;position:relative;z-index:1;padding:0 12px;}
+.step-num{
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;font-size:22px;
+  border:2px solid var(--border);background:#fff;
+  transition:all .3s;
+}
+.step:hover .step-num{border-color:var(--red);background:var(--red);color:#fff;}
+.step-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:6px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+
+/* ─── BIOLOGIA ─── */
+.bio{background:var(--navy);color:#fff;}
+.bio-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.bio-title{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,44px);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-1px;margin-bottom:16px;}
+.bio-title em{font-style:italic;color:var(--red);}
+.bio-sub{font-size:16px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:28px;}
+.bio-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.bio-chip{
+  padding:8px 16px;border-radius:40px;
+  font-size:14px;font-weight:700;border:1.5px solid;
+}
+.bio-chip.on{background:rgba(76,175,133,.15);color:#7FDDB5;border-color:rgba(76,175,133,.3);}
+.bio-chip.off{background:rgba(255,255,255,.05);color:rgba(255,255,255,.25);border-color:rgba(255,255,255,.08);}
+.abo-visual{
+  background:rgba(255,255,255,.04);border:0.5px solid rgba(255,255,255,.1);
+  border-radius:var(--r-lg);padding:32px;
+}
+.abo-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px;}
+.abo-type-hero{
+  text-align:center;padding:24px;
+  background:var(--red);border-radius:var(--r-md);margin-bottom:16px;
+}
+.abo-type-lbl{font-size:11px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;}
+.abo-type-val{font-family:'Fraunces',serif;font-size:52px;font-weight:700;color:#fff;line-height:1;}
+.abo-type-desc{font-size:12px;color:rgba(255,255,255,.8);margin-top:4px;}
+.abo-rows{display:flex;flex-direction:column;gap:10px;}
+.abo-row-label{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:6px;}
+.abo-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.abo-chip{
+  padding:5px 11px;border-radius:8px;font-size:12px;font-weight:700;
+}
+.abo-chip.y{background:rgba(76,175,133,.2);color:#7FDDB5;border:1px solid rgba(76,175,133,.3);}
+.abo-chip.n{background:rgba(255,255,255,.04);color:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.06);}
+
+/* ─── FEATURES ─── */
+.features{background:var(--warm);}
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:48px;}
+.feat-card{
+  background:#fff;border-radius:var(--r-md);
+  padding:28px 26px;border:0.5px solid var(--border);
+  display:flex;align-items:flex-start;gap:16px;
+  transition:all .25s;
+}
+.feat-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(15,25,35,.08);}
+.feat-icon{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+}
+.feat-title{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:6px;}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.feat-tag{
+  display:inline-block;margin-top:10px;
+  font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;
+}
+
+/* ─── IMPACTO ─── */
+.impacto{background:var(--red);color:#fff;text-align:center;}
+.impacto-title{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,56px);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px;max-width:700px;margin-inline:auto;}
+.impacto-sub{font-size:18px;color:rgba(255,255,255,.75);max-width:500px;margin-inline:auto;line-height:1.6;margin-bottom:56px;}
+.impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:800px;margin-inline:auto;background:rgba(255,255,255,.15);border-radius:var(--r-md);overflow:hidden;}
+.impact-item{background:rgba(255,255,255,.08);padding:32px 24px;text-align:center;}
+.impact-num{font-family:'Fraunces',serif;font-size:44px;font-weight:700;color:#fff;line-height:1;}
+.impact-lbl{font-size:13px;color:rgba(255,255,255,.65);margin-top:6px;line-height:1.4;}
+
+/* ─── SOBRE ─── */
+.sobre{background:#fff;}
+.sobre-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.sobre-tag-list{display:flex;flex-direction:column;gap:10px;margin-top:32px;}
+.sobre-tag-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;background:var(--warm);
+  border-radius:var(--r-sm);border:0.5px solid var(--border);
+}
+.sti-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sti-txt{font-size:13px;font-weight:500;color:var(--navy);}
+.senac-box{
+  background:var(--navy);border-radius:var(--r-lg);
+  padding:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;min-height:300px;position:relative;overflow:hidden;
+}
+.senac-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 100%, rgba(224,82,82,.25),transparent 60%);
+}
+.senac-logo{
+  width:72px;height:72px;background:var(--red);border-radius:20px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;
+}
+.senac-name{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#fff;position:relative;}
+.senac-name span{color:var(--red);}
+.senac-school{font-size:13px;color:rgba(255,255,255,.4);margin-top:8px;position:relative;}
+.senac-course{
+  margin-top:20px;padding:8px 20px;
+  background:rgba(255,255,255,.08);border:0.5px solid rgba(255,255,255,.12);
+  border-radius:40px;font-size:12px;font-weight:500;color:rgba(255,255,255,.65);
+  position:relative;
+}
+
+/* ─── CTA FINAL ─── */
+.cta-final{
+  background:var(--navy);
+  padding:120px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-final::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(224,82,82,.15),transparent 70%);
+}
+.cta-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(36px,6vw,64px);
+  font-weight:700;color:#fff;
+  line-height:1.05;letter-spacing:-2px;
+  margin-bottom:20px;position:relative;
+}
+.cta-title em{font-style:italic;color:var(--red);}
+.cta-sub{font-size:18px;color:rgba(255,255,255,.5);max-width:480px;margin-inline:auto;line-height:1.6;margin-bottom:44px;position:relative;}
+.cta-actions{display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;}
+.btn-white{
+  background:#fff;color:var(--navy);
+  padding:16px 32px;border-radius:50px;
+  font-size:16px;font-weight:600;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .25s;box-shadow:0 8px 32px rgba(0,0,0,.2);
+}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3);}
+.btn-outline-white{
+  color:#fff;padding:16px 28px;border-radius:50px;
+  font-size:16px;font-weight:500;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid rgba(255,255,255,.2);transition:all .25s;
+}
+.btn-outline-white:hover{border-color:rgba(255,255,255,.6);transform:translateY(-2px);}
+
+/* ─── FOOTER ─── */
+footer{
+  background:var(--navy);border-top:0.5px solid rgba(255,255,255,.08);
+  padding:32px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-logo{display:flex;align-items:center;gap:12px;}
+.footer-logo-name{font-family:'Fraunces',serif;font-size:19px;color:#fff;font-weight:700;}
+.footer-logo-name span{color:var(--red);}
+.footer-txt{font-size:12px;color:rgba(255,255,255,.3);}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:#fff;}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.reveal{
+  opacity:0;transform:translateY(32px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  .site-nav{padding:14px 20px;}
+  section{padding:72px 20px;}
+  .prob-grid,.bio-grid,.sobre-grid{grid-template-columns:1fr;}
+  .sol-grid{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr 1fr;}
+  .steps::before{display:none;}
+  .feat-grid{grid-template-columns:1fr;}
+  .impact-grid{grid-template-columns:1fr;}
+  .cta-final{padding:72px 20px;}
+  footer{flex-direction:column;text-align:center;}
+  .footer-links{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav" aria-label="Navegação principal">
+  <a class="nav-logo" href="#hero-title" aria-label="Ir para o início do HemoConecta">
+    <img src="image.png" alt="Logo do HemoConecta" class="nav-logo-img">
+    <span class="nav-logo-name">Hemo<span>Conecta</span></span>
+  </a>
+
+  <button class="nav-toggle" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+    <span class="nav-toggle-bar" aria-hidden="true"></span>
+  </button>
+
+  <div class="nav-menu" id="menu-principal">
+    <div class="nav-links" role="list">
+      <a href="#problema" role="listitem">Problema</a>
+      <a href="#solucao" role="listitem">Solução</a>
+      <a href="#biologia" role="listitem">Biologia</a>
+      <a href="#impacto" role="listitem">Impacto</a>
+      <a href="#sobre" role="listitem">Sobre</a>
+    </div>
+
+    <a href="#cta" class="nav-cta" aria-label="Conhecer o app HemoConecta">
+      <i class="ti ti-heart" aria-hidden="true"></i> Conhecer o app
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-eyebrow" role="note">
+    <span class="hero-eyebrow-dot" aria-hidden="true"></span>
+    Projeto SENAC-PE · 2026
+  </div>
+  <h1 class="hero-h1" id="hero-title">
+    Doe sangue.<br><em>Salve vidas.</em>
+  </h1>
+  <p class="hero-sub">
+    HemoConecta é o app que conecta jovens doadores aos hemocentros mais próximos — com gamificação, compatibilidade sanguínea em tempo real e acessibilidade total.
+  </p>
+  <div class="hero-actions">
+    <a href="#solucao" class="btn-primary" aria-label="Ver a solução proposta">
+      <i class="ti ti-arrow-down" aria-hidden="true"></i> Ver a solução
+    </a>
+    <a href="#cta" class="btn-ghost" aria-label="Acompanhar o projeto">
+      <i class="ti ti-player-play" aria-hidden="true"></i> Ver demo ao vivo
+    </a>
+  </div>
+  <div class="hero-stat" role="list" aria-label="Estatísticas principais">
+    <div class="stat-item" role="listitem">
+      <div class="stat-num"><span>2%</span></div>
+      <div class="stat-lbl">da população<br>brasileira doa sangue</div>
+    </div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div class="stat-item" role="listitem">
+      <div class="stat-num">4<span>x</span></div>
+      <div class="stat-lbl">vidas salvas por<br>cada doação</div>
+    </div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div class="stat-item" role="listitem">
+      <div class="stat-num"><span>18</span>–25</div>
+      <div class="stat-lbl">anos — público<br>menos engajado</div>
+    </div>
+  </div>
+
+  <!-- PHONE MOCKUP -->
+  <div class="hero-phone" aria-label="Prévia do aplicativo HemoConecta">
+    <div class="phone-glow" aria-hidden="true"></div>
+    <div class="phone-wrap" role="img" aria-label="Interface do app HemoConecta mostrando o dashboard principal">
+      <div class="phone-notch" aria-hidden="true"></div>
+      <div class="phone-screen-img">
+        <div class="ps-hero">
+          <div class="ps-greet">Bom dia,</div>
+          <div class="ps-name">Ana Beatriz ✨</div>
+          <div class="ps-type" aria-label="Tipo sanguíneo O positivo">O+</div>
+        </div>
+        <div class="ps-body">
+          <div class="ps-status" role="status" aria-label="Apta para doar">
+            <div class="ps-si" aria-hidden="true"><i class="ti ti-check"></i></div>
+            <div class="ps-st">
+              <div class="ps-sm">Apta para doar!</div>
+              <div class="ps-ss">Agende sua doação agora →</div>
+            </div>
+          </div>
+          <div class="ps-grid">
+            <div class="ps-mc" aria-label="3 doações realizadas">
+              <div class="ps-ml">Doações</div>
+              <div class="ps-mv">3</div>
+              <div class="ps-ms">realizadas</div>
+            </div>
+            <div class="ps-mc" aria-label="Aproximadamente 12 vidas salvas">
+              <div class="ps-ml">Vidas salvas</div>
+              <div class="ps-mv" style="color:#E05252;">≈12</div>
+              <div class="ps-ms">estimativa</div>
+            </div>
+          </div>
+          <div class="ps-near">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div class="ps-nn">HEMOPE — Boa Vista</div>
+              <span style="font-size:11px;font-weight:600;color:#E05252;" aria-label="2,4 quilômetros de distância">2,4 km</span>
+            </div>
+            <div class="ps-nd">Aberto agora · Seg–Sex 7h–17h</div>
+            <span class="ps-tag r" aria-label="Urgência: tipo O negativo">O− urgente</span>
+          </div>
+        </div>
+        <div class="ps-bnav" role="navigation" aria-label="Navegação do app">
+          <div class="ps-bn a" aria-label="Início" aria-current="page"><i class="ti ti-home" aria-hidden="true"></i><span>Início</span></div>
+          <div class="ps-bn" aria-label="Mapa"><i class="ti ti-map-pin" aria-hidden="true"></i><span>Mapa</span></div>
+          <div class="ps-bn" aria-label="Tipo"><i class="ti ti-dna" aria-hidden="true"></i><span>Tipo</span></div>
+          <div class="ps-bn" aria-label="Badges"><i class="ti ti-trophy" aria-hidden="true"></i><span>Badges</span></div>
+          <div class="ps-bn" aria-label="Perfil"><i class="ti ti-user" aria-hidden="true"></i><span>Perfil</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="problema" id="problema" aria-labelledby="prob-title">
+  <div class="section-inner">
+    <div class="prob-grid">
+      <div>
+        <div class="section-tag reveal"><i class="ti ti-alert-triangle" aria-hidden="true"></i> O Problema</div>
+        <h2 class="section-title reveal" id="prob-title">Por que tão poucas pessoas <em>doam sangue?</em></h2>
+        <p class="section-sub reveal">O Brasil precisa de 3,5% da população doando regularmente. Estamos em 2%. A barreira não é falta de vontade — é falta de acesso e informação.</p>
+      </div>
+      <div>
+        <div class="big-stat-box reveal" role="img" aria-label="Apenas 2% da população brasileira doa sangue regularmente">
+          <div class="bsb-num" aria-hidden="true"><span>2</span>%</div>
+          <div class="bsb-desc">da população brasileira<br>doa sangue regularmente</div>
+          <div class="bsb-sep" aria-hidden="true"></div>
+          <div class="bsb-sub">Meta da OMS: 3,5%</div>
+        </div>
+      </div>
+    </div>
+    <div class="prob-cards reveal" style="margin-top:40px;" role="list" aria-label="Principais barreiras para a doação de sangue">
+      <div class="prob-card" role="listitem">
+        <div class="prob-icon" style="background:#FCEBEB;" aria-hidden="true"><i class="ti ti-map-off" style="color:#E05252;"></i></div>
+        <div>
+          <div class="prob-title">Falta de localização</div>
+          <div class="prob-desc">Jovens não sabem onde fica o hemocentro mais próximo nem o horário de funcionamento.</div>
+        </div>
+      </div>
+      <div class="prob-card" role="listitem">
+        <div class="prob-icon" style="background:#FAEEDA;" aria-hidden="true"><i class="ti ti-question-mark" style="color:#854F0B;"></i></div>
+        <div>
+          <div class="prob-title">Desinformação sobre tipos sanguíneos</div>
+          <div class="prob-desc">Muitos não sabem seu tipo sanguíneo nem entendem a urgência de certos tipos no sistema ABO e Rh.</div>
+        </div>
+      </div>
+      <div class="prob-card" role="listitem">
+        <div class="prob-icon" style="background:#E6F1FB;" aria-hidden="true"><i class="ti ti-mood-sad" style="color:#185FA5;"></i></div>
+        <div>
+          <div class="prob-title">Falta de engajamento contínuo</div>
+          <div class="prob-desc">Mesmo quem doa uma vez raramente retorna. Não há incentivo ou lembrança para a próxima doação.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUÇÃO -->
+<section class="solucao" id="solucao" aria-labelledby="sol-title">
+  <div class="section-inner">
+    <div class="section-tag reveal"><i class="ti ti-bulb" aria-hidden="true"></i> A Solução</div>
+    <h2 class="section-title reveal" id="sol-title">Um app que <em>remove cada barreira</em></h2>
+    <p class="section-sub reveal">HemoConecta foi desenhado para o público de 18 a 25 anos — os menos engajados e os mais conectados digitalmente.</p>
+    <div class="sol-grid" role="list" aria-label="Funcionalidades principais do HemoConecta">
+      <div class="sol-card reveal" role="listitem">
+        <div class="sol-num">01</div>
+        <div class="sol-icon" style="background:#FCEBEB;" aria-hidden="true"><i class="ti ti-map-pin" style="color:#E05252;"></i></div>
+        <div class="sol-title">Mapa de hemocentros</div>
+        <div class="sol-desc">Geolocalização em tempo real dos pontos de coleta próximos, com status de abertura e tipos sanguíneos em urgência.</div>
+      </div>
+      <div class="sol-card reveal" role="listitem">
+        <div class="sol-num">02</div>
+        <div class="sol-icon" style="background:#EAF3DE;" aria-hidden="true"><i class="ti ti-dna" style="color:#3B6D11;"></i></div>
+        <div class="sol-title">Compatibilidade ABO + Rh</div>
+        <div class="sol-desc">O usuário descobre seu tipo sanguíneo, para quem pode doar e de quem pode receber, com base no sistema biológico real.</div>
+      </div>
+      <div class="sol-card reveal" role="listitem">
+        <div class="sol-num">03</div>
+        <div class="sol-icon" style="background:#E6F1FB;" aria-hidden="true"><i class="ti ti-calendar" style="color:#185FA5;"></i></div>
+        <div class="sol-title">Agendamento integrado</div>
+        <div class="sol-desc">Marque data e horário diretamente no app, com lembrete automático e respeito ao intervalo mínimo entre doações.</div>
+      </div>
+      <div class="sol-card reveal" role="listitem">
+        <div class="sol-num">04</div>
+        <div class="sol-icon" style="background:#FAEEDA;" aria-hidden="true"><i class="ti ti-trophy" style="color:#854F0B;"></i></div>
+        <div class="sol-title">Gamificação e conquistas</div>
+        <div class="sol-desc">Badges, sequências de doação, estimativa de vidas salvas e compartilhamento social para engajar a longo prazo.</div>
+      </div>
+      <div class="sol-card reveal" role="listitem">
+        <div class="sol-num">05</div>
+        <div class="sol-icon" style="background:#F0E6FB;" aria-hidden="true"><i class="ti ti-accessibility" style="color:#7B3FA8;"></i></div>
+        <div class="sol-title">Acessibilidade total</div>
+        <div class="sol-desc">Alto contraste, modo daltônico, leitor de tela (TalkBack e VoiceOver), fonte ajustável e navegação por teclado. Padrão WCAG AA.</div>
+      </div>
+      <div class="sol-card reveal" role="listitem">
+        <div class="sol-num">06</div>
+        <div class="sol-icon" style="background:#E8F8F0;" aria-hidden="true"><i class="ti ti-building" style="color:#1A7A4A;"></i></div>
+        <div class="sol-title">Modelo B2B para empresas</div>
+        <div class="sol-desc">Painel corporativo para campanhas de doação entre funcionários — fonte de receita clara e sustentável para o negócio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="como" id="como" aria-labelledby="como-title">
+  <div class="section-inner" style="text-align:center;">
+    <div class="section-tag reveal" style="justify-content:center;"><i class="ti ti-route" aria-hidden="true"></i> Como funciona</div>
+    <h2 class="section-title reveal" id="como-title">Da abertura à <em>doação confirmada</em></h2>
+    <p class="section-sub reveal" style="margin-inline:auto;">Em menos de 3 minutos o usuário vai do cadastro ao agendamento confirmado.</p>
+    <div class="steps reveal" role="list" aria-label="Fluxo de uso do aplicativo">
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true"><i class="ti ti-user-plus" style="color:#E05252;"></i></div>
+        <div class="step-title">Cadastro</div>
+        <div class="step-desc">Nome, e-mail e tipo sanguíneo. Quem não sabe pode descobrir depois no app.</div>
+      </div>
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true"><i class="ti ti-map-search" style="color:#E05252;"></i></div>
+        <div class="step-title">Descubra o hemocentro</div>
+        <div class="step-desc">Mapa com os pontos mais próximos e urgências de tipo sanguíneo em tempo real.</div>
+      </div>
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true"><i class="ti ti-calendar-check" style="color:#E05252;"></i></div>
+        <div class="step-title">Agende a doação</div>
+        <div class="step-desc">Escolha data e horário. O app avisa quando você puder doar novamente.</div>
+      </div>
+      <div class="step" role="listitem">
+        <div class="step-num" aria-hidden="true"><i class="ti ti-trophy" style="color:#E05252;"></i></div>
+        <div class="step-title">Conquiste e inspire</div>
+        <div class="step-desc">Desbloqueie badges, veja o impacto e compartilhe com amigos para engajá-los.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIOLOGIA -->
+<section class="bio" id="biologia" aria-labelledby="bio-title">
+  <div class="section-inner">
+    <div class="bio-grid">
+      <div>
+        <div class="section-tag reveal" style="background:rgba(224,82,82,.15);border-color:rgba(224,82,82,.3);color:#ff9999;"><i class="ti ti-dna" aria-hidden="true"></i> Biologia aplicada</div>
+        <h2 class="bio-title reveal" id="bio-title">Sistema ABO + Rh<br><em>dentro do app</em></h2>
+        <p class="bio-sub reveal">O HemoConecta integra o conteúdo real da biologia — o sistema de grupos sanguíneos — diretamente na experiência do usuário.</p>
+        <div class="bio-chips reveal" role="list" aria-label="Tipos sanguíneos suportados">
+          <div class="bio-chip on" role="listitem">O+</div>
+          <div class="bio-chip on" role="listitem">O−</div>
+          <div class="bio-chip on" role="listitem">A+</div>
+          <div class="bio-chip on" role="listitem">A−</div>
+          <div class="bio-chip on" role="listitem">B+</div>
+          <div class="bio-chip on" role="listitem">B−</div>
+          <div class="bio-chip on" role="listitem">AB+</div>
+          <div class="bio-chip on" role="listitem">AB−</div>
+        </div>
+        <p style="font-size:13px;color:rgba(255,255,255,.35);margin-top:20px;line-height:1.6;">
+          O sistema ABO define antígenos nos glóbulos vermelhos. O fator Rh indica a presença da proteína D. A combinação dos dois determina a compatibilidade total para transfusões.
+        </p>
+      </div>
+      <div class="abo-visual reveal" role="img" aria-label="Visualização da compatibilidade do tipo O positivo">
+        <div class="abo-label">Compatibilidade — O+</div>
+        <div class="abo-type-hero">
+          <div class="abo-type-lbl">Tipo sanguíneo</div>
+          <div class="abo-type-val" aria-label="O positivo">O+</div>
+          <div class="abo-type-desc">Doador universal de hemácias</div>
+        </div>
+        <div class="abo-rows">
+          <div>
+            <div class="abo-row-label">Posso receber de</div>
+            <div class="abo-chips" role="list" aria-label="Tipos compatíveis para receber">
+              <div class="abo-chip y" role="listitem">O+</div>
+              <div class="abo-chip y" role="listitem">O−</div>
+              <div class="abo-chip n" role="listitem" aria-label="Incompatível">A+</div>
+              <div class="abo-chip n" role="listitem" aria-label="Incompatível">B+</div>
+              <div class="abo-chip n" role="listitem" aria-label="Incompatível">AB+</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <div class="abo-row-label">Posso doar para</div>
+            <div class="abo-chips" role="list" aria-label="Tipos que posso ajudar">
+              <div class="abo-chip y" role="listitem">O+</div>
+              <div class="abo-chip y" role="listitem">A+</div>
+              <div class="abo-chip y" role="listitem">B+</div>
+              <div class="abo-chip y" role="listitem">AB+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES / DIFERENCIAIS -->
+<section class="features" id="features" aria-labelledby="feat-title">
+  <div class="section-inner">
+    <div class="section-tag reveal"><i class="ti ti-sparkles" aria-hidden="true"></i> Diferenciais</div>
+    <h2 class="section-title reveal" id="feat-title">O que faz o HemoConecta <em>único</em></h2>
+    <div class="feat-grid" role="list" aria-label="Diferenciais do HemoConecta">
+      <div class="feat-card reveal" role="listitem">
+        <div class="feat-icon" style="background:#FCEBEB;" aria-hidden="true"><i class="ti ti-trophy" style="color:#E05252;"></i></div>
+        <div>
+          <div class="feat-title">Gamificação real</div>
+          <div class="feat-desc">Badges desbloqueáveis, sequências de doação, estimativa de vidas salvas e rankings para manter o engajamento a longo prazo.</div>
+          <span class="feat-tag" style="background:#FCEBEB;color:#A32D2D;">Retenção de usuário</span>
+        </div>
+      </div>
+      <div class="feat-card reveal" role="listitem">
+        <div class="feat-icon" style="background:#E6F1FB;" aria-hidden="true"><i class="ti ti-accessibility" style="color:#185FA5;"></i></div>
+        <div>
+          <div class="feat-title">Acessibilidade WCAG AA</div>
+          <div class="feat-desc">Alto contraste, modo daltônico, TalkBack e VoiceOver, fonte ajustável e navegação por teclado. O app é para todos.</div>
+          <span class="feat-tag" style="background:#E6F1FB;color:#185FA5;">Inclusão digital</span>
+        </div>
+      </div>
+      <div class="feat-card reveal" role="listitem">
+        <div class="feat-icon" style="background:#EAF3DE;" aria-hidden="true"><i class="ti ti-map-2" style="color:#3B6D11;"></i></div>
+        <div>
+          <div class="feat-title">Geolocalização em tempo real</div>
+          <div class="feat-desc">Hemocentros com status ao vivo (aberto/fechado), horários, distância e urgência de tipos sanguíneos — tudo atualizado.</div>
+          <span class="feat-tag" style="background:#EAF3DE;color:#3B6D11;">Utilidade imediata</span>
+        </div>
+      </div>
+      <div class="feat-card reveal" role="listitem">
+        <div class="feat-icon" style="background:#FAEEDA;" aria-hidden="true"><i class="ti ti-building-skyscraper" style="color:#854F0B;"></i></div>
+        <div>
+          <div class="feat-title">Modelo B2B corporativo</div>
+          <div class="feat-desc">Painel dedicado para empresas criarem campanhas internas de doação — modelo de receita claro e sustentável para o negócio.</div>
+          <span class="feat-tag" style="background:#FAEEDA;color:#854F0B;">Monetização</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACTO -->
+<section class="impacto" id="impacto" aria-labelledby="impact-title">
+  <div class="section-inner">
+    <h2 class="impacto-title reveal" id="impact-title">O impacto que esperamos <em>gerar</em></h2>
+    <p class="impacto-sub reveal">Cada doação pode salvar até 4 vidas. Se engajarmos apenas 0,1% dos jovens de Recife, o resultado já é transformador.</p>
+    <div class="impact-grid reveal" role="list" aria-label="Metas de impacto do HemoConecta">
+      <div class="impact-item" role="listitem">
+        <div class="impact-num" aria-label="5 mil usuários esperados">5 mil</div>
+        <div class="impact-lbl">usuários ativos<br>no primeiro ano</div>
+      </div>
+      <div class="impact-item" role="listitem">
+        <div class="impact-num" aria-label="20 mil vidas esperadas">20 mil</div>
+        <div class="impact-lbl">vidas potencialmente<br>impactadas</div>
+      </div>
+      <div class="impact-item" role="listitem">
+        <div class="impact-num" aria-label="Escala nacional">Nacional</div>
+        <div class="impact-lbl">potencial de expansão<br>para todo o Brasil</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="sobre" id="sobre" aria-labelledby="sobre-title">
+  <div class="section-inner">
+    <div class="sobre-grid">
+      <div>
+        <div class="section-tag reveal"><i class="ti ti-school" aria-hidden="true"></i> Sobre o projeto</div>
+        <h2 class="section-title reveal" id="sobre-title">Desenvolvido no <em>SENAC-PE</em></h2>
+        <p class="section-sub reveal">Um projeto interdisciplinar entre Biologia e Desenvolvimento de Sistemas, com um protótipo real, navegável e pronto para escalar.</p>
+        <div class="sobre-tag-list reveal" role="list" aria-label="Características do projeto">
+          <div class="sobre-tag-item" role="listitem">
+            <div class="sti-icon" style="background:#FCEBEB;" aria-hidden="true"><i class="ti ti-device-mobile" style="color:#E05252;"></i></div>
+            <span class="sti-txt">Protótipo funcional e navegável</span>
+          </div>
+          <div class="sobre-tag-item" role="listitem">
+            <div class="sti-icon" style="background:#EAF3DE;" aria-hidden="true"><i class="ti ti-dna" style="color:#3B6D11;"></i></div>
+            <span class="sti-txt">Biologia aplicada (ABO + Rh)</span>
+          </div>
+          <div class="sobre-tag-item" role="listitem">
+            <div class="sti-icon" style="background:#E6F1FB;" aria-hidden="true"><i class="ti ti-accessibility" style="color:#185FA5;"></i></div>
+            <span class="sti-txt">Acessibilidade WCAG completa</span>
+          </div>
+          <div class="sobre-tag-item" role="listitem">
+            <div class="sti-icon" style="background:#FAEEDA;" aria-hidden="true"><i class="ti ti-trending-up" style="color:#854F0B;"></i></div>
+            <span class="sti-txt">Modelo de negócio B2B definido</span>
+          </div>
+        </div>
+      </div>
+      <div class="senac-box reveal" aria-label="Projeto do SENAC Pernambuco, curso de Desenvolvimento de Sistemas">
+        <div class="senac-logo" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 56 56" fill="none">
+            <path d="M28 40C28 40 14 30 14 21C14 16.58 17.58 13 22 13C24.2 13 26.2 13.9 27.7 15.4C29.2 13.9 31.2 13 33.3 13C37.72 13 41.3 16.58 41.3 21C41.3 30 28 40 28 40Z" fill="white"/>
+            <line x1="22" y1="22" x2="34" y2="22" stroke="#E05252" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="28" y1="16" x2="28" y2="28" stroke="#E05252" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="senac-name">Hemo<span>Conecta</span></div>
+        <div class="senac-school">SENAC Pernambuco · 2026</div>
+        <div class="senac-course">Desenvolvimento de Sistemas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="cta" aria-labelledby="cta-title">
+  <h2 class="cta-title reveal" id="cta-title">Pronto para fazer<br>parte <em>disso?</em></h2>
+  <p class="cta-sub reveal">Se você quer investir, colaborar ou simplesmente acompanhar o HemoConecta, entre em contato com nossa equipe.</p>
+  <div class="cta-actions reveal">
+    <a href="mailto:hemoconecta@email.com" class="btn-white" aria-label="Entrar em contato com a equipe HemoConecta">
+      <i class="ti ti-mail" aria-hidden="true"></i> Falar com a equipe
+    </a>
+    <a href="#solucao" class="btn-outline-white" aria-label="Ver o protótipo do app">
+      <i class="ti ti-eye" aria-hidden="true"></i> Ver o protótipo
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="footer-logo">
+    <img src="image.png" alt="Logo do HemoConecta" class="footer-logo-img">
+    <span class="footer-logo-name">Hemo<span>Conecta</span></span>
+  </div>
+  <p class="footer-txt">© 2026 HemoConecta · SENAC-PE · Projeto acadêmico com potencial real</p>
+  <nav class="footer-links" aria-label="Links do rodapé">
+    <a href="#problema">Problema</a>
+    <a href="#solucao">Solução</a>
+    <a href="#biologia">Biologia</a>
+    <a href="#cta">Contato</a>
+  </nav>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Scroll reveal
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Nav toggle & behavior
+  const nav = document.querySelector('.site-nav');
+  const toggle = document.querySelector('.nav-toggle');
+  const menu = document.querySelector('.nav-menu');
+  const navLinks = document.querySelectorAll('.nav-links a, .nav-cta');
+
+  const closeMenu = () => {
+    nav.classList.remove('open');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Abrir menu');
+    }
+  };
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    });
+  }
+
+  // Fecha o menu mobile quando o usuário clica em um link
+  navLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+  // Fecha o menu ao clicar fora dele
+  document.addEventListener('click', (event) => {
+    if (!nav.contains(event.target)) closeMenu();
+  });
+
+  // Fecha o menu com ESC
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+
+  // Nav background on scroll
+  const onScroll = () => {
+    if (window.scrollY > 40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+
+  // Active link highlighting
+  const sections = Array.from(document.querySelectorAll('section[id]'));
+  const idToLink = new Map(sections.map(s => [s.id, document.querySelector(`.nav-links a[href="#${s.id}"]`)]));
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = idToLink.get(entry.target.id);
+      if (!link) return;
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.55 });
+  sections.forEach(s => sectionObserver.observe(s));
+});
+</script>
+</body>
+</html>
